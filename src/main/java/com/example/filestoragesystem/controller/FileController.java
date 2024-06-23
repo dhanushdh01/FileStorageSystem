@@ -21,7 +21,11 @@ public class FileController {
     private FileService fileService;
 
     @GetMapping("/upload")
-    public String uploadForm(Model model) {
+    public String uploadForm(Model model, @AuthenticationPrincipal User user) {
+        if (user == null) {
+            // User is not authenticated, redirect to login
+            return "redirect:/users/login";
+        }
         model.addAttribute("file", new File());
         return "upload";
     }

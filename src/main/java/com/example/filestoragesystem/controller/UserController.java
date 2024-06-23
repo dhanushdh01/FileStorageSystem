@@ -3,6 +3,7 @@ package com.example.filestoragesystem.controller;
 import com.example.filestoragesystem.entity.User;
 import com.example.filestoragesystem.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private UserService userService;
@@ -44,16 +47,18 @@ public class UserController {
         User existingUser = userService.findByUsername(user.getUsername());
 
         // Check if user exists and password matches
-        if (existingUser != null && existingUser.getPassword().equals(user.getPassword())) {
+        if (existingUser != null && passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
             // Successful login
             model.addAttribute("user", existingUser);
-            return "redirect:/dashboard"; // Redirect to dashboard or any other page
+            return "redirect:/files/upload"; // Redirect to the upload page
         } else {
             // Failed login
             model.addAttribute("error", "Invalid username or password");
             return "login"; // Return to login page with error message
         }
     }
+
+
     @GetMapping("/logout")
     public String logout() {
         // Implement logout logic if necessary (e.g., invalidate session)
