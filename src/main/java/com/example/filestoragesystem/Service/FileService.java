@@ -13,5 +13,5 @@ public interface FileService {
 
     List<File> getFilesByUser(User user);
 
-    void downloadFile(Long fileId, User user);
+    void downloadFile(Long fileId, User user) throws IOException;
 }

@@ -3,7 +3,8 @@ package com.example.filestoragesystem.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 @Entity
 @Table(name = "files")
@@ -28,4 +29,7 @@ public class File {
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
+    public InputStream getDataAsStream() {
+        return new ByteArrayInputStream(data);
+    }
 }

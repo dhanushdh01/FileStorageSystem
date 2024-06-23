@@ -43,7 +43,11 @@ public class FileController {
 
     @GetMapping("/download/{fileId}")
     public String downloadFile(@PathVariable Long fileId, @AuthenticationPrincipal User user) {
-        fileService.downloadFile(fileId, user);
+        try {
+            fileService.downloadFile(fileId, user);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return "redirect:/files/list";
     }
 }
